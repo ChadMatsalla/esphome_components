@@ -1,0 +1,5 @@
+esp32:
+  board: seeed_xiao_esp32c3
+
+packages:
+  acs712: !include acs712.yml

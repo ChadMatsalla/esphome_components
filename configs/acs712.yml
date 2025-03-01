@@ -10,8 +10,7 @@ esphome:
   libraries:
     - https://github.com/RobTillaart/ACS712.git
 
-esp32:
-  board: seeed_xiao_esp32c3
+
 
 wifi:
   ssid: !secret ssid

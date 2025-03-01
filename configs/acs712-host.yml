@@ -1,0 +1,4 @@
+host:
+
+packages:
+  acs712: !include acs712.yml
