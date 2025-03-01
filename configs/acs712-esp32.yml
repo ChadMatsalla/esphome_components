@@ -3,3 +3,35 @@ esp32:
 
 packages:
   acs712: !include acs712.yml
+
+i2c:
+  sda: GPIO8
+  scl: GPIO9
+  scan: True
+
+ads1115:
+  - address: 0x48
+    id: ads1115_1
+
+sensor:
+- platform: adc
+  pin: GPIO0
+  name: "ACS712"
+  id: acs712_1
+  update_interval: 5s
+# - platform: ads1115
+#   multiplexer: 'A0_GND'
+#   gain: 2.048
+#   name: "ADS1115 A0"
+#   id: ads1115_a0
+#   update_interval: 5s
+  
+web_server:
+  version: 3
+
+ota:
+  platform: esphome
+  
+wifi:
+  ssid: !secret ssid
+  password: !secret password

@@ -1,6 +1,6 @@
 external_components:
 - source: github://chadmatsalla/esphome_components
-  refresh: 30s
+  refresh: 10s
   components:
     - acs712
 
@@ -10,38 +10,17 @@ esphome:
   libraries:
     - https://github.com/RobTillaart/ACS712.git
 
-
-
-wifi:
-  ssid: !secret ssid
-  password: !secret password
-
 api:
 
 logger:
   level: DEBUG
-
-i2c:
-  sda: GPIO8
-  scl: GPIO9
-  scan: True
-
-ads1115:
-  - address: 0x48
-    id: ads1115_1
-
-web_server:
-  version: 3
-
-ota:
-  platform: esphome
 
 sensor:
 - id: csmacs
   name: "Dieselwurks Sensor"
   platform: acs712
   # csmpin: 0
-  pin: GPIO0
+  # pin: GPIO0
   current:
     name: "Current"
     id: current

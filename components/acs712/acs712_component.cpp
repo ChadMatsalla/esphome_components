@@ -14,24 +14,31 @@ void ACS712Sensor::setup() {
     ESP_LOGD("acs712", "Noise mV: %d", this->ACS->getNoisemV());
     ESP_LOGD("acs712", "GPIO is %d", this->csmpin_);
 }
+void ACS712Sensor::loop() {
+    if (!this->is_sampling_)
+        return;
+}
 
 void ACS712Sensor::update() {
-    float average = 0;
-    int count = 5;
-    for (int i = 0; i < count; i++) {
-        average += this->ACS->mA_AC();
-    }
-    float amps = (average / count / 10000.0) - 0.13;
-    if (amps < 0.03) {
-        amps = 0.0;
-    }
+    is_sampling_ = true;
 
-    if (this->current_sensor != nullptr) {  // ✅ Check if sensor is initialized
-        this->current_sensor->publish_state(amps);
-    }
-    if (this->power_sensor != nullptr) {  // ✅ Check if sensor is initialized
-        this->power_sensor->publish_state(amps * 230);
-    }
+    this->set_timeout("read", this->sample_duration_, [this]() {
+      this->is_sampling_ = false;
+      if (this->num_samples_ == 0)
+        return;
+  
+      float mean = this->sample_sum_ / float(this->num_samples_);
+      ESP_LOGD(TAG, "ADC read voltage: %.3f V (mean from %" PRId32 " samples)", mean, this->num_samples_);
+  
+      // PM2.5 calculation
+      // ref: https://www.howmuchsnow.com/arduino/airquality/
+      int16_t pm_2_5_value = 170 * mean;
+      this->publish_state(pm_2_5_value);
+    });
+  
+    // reset readings
+    this->num_samples_ = 0;
+    this->sample_sum_ = 0.0f;
 }
 
 }  // namespace acs712_external

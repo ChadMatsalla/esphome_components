@@ -1,4 +1,4 @@
-from esphome import pins
+# from esphome import pins
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import sensor
@@ -7,11 +7,12 @@ from esphome.const import (
   UNIT_WATT,
   ICON_FLASH,
   ICON_CURRENT_AC,
-  CONF_PIN,
+#   CONF_PIN,
   CONF_ID
 )
 
 DEPENDENCIES = []
+AUTO_LOAD = ["voltage_sampler"]
 
 acs712_ns = cg.esphome_ns.namespace("acs712_external")
 ACS712Sensor = acs712_ns.class_("ACS712Sensor",
@@ -25,8 +26,9 @@ CONFIG_SCHEMA = (
         icon=ICON_CURRENT_AC,
         accuracy_decimals=2,
     ).extend({
-        cv.Required(CONF_PIN): cv.All(pins.internal_gpio_input_pin_schema),
-        cv.Optional("csmpin"): cv.positive_int,
+        # cv.Required(CONF_PIN): cv.All(pins.internal_gpio_input_pin_schema),
+        cv.Required(CONF_SENSOR): cv.use_id(voltage_sampler.VoltageSampler),
+        # cv.Optional("csmpin"): cv.positive_int,
         cv.Optional("current"): sensor.sensor_schema(),
         cv.Optional("power"): sensor.sensor_schema(
             unit_of_measurement=UNIT_WATT,
@@ -41,12 +43,14 @@ async def to_code(config):
     await cg.register_component(var, config)
     await sensor.register_sensor(var, config)
     # print(f"id is {var}")
-    pin = await cg.gpio_pin_expression(config[CONF_PIN])
+    # pin = await cg.gpio_pin_expression(config[CONF_PIN])
     # print(f"Pin is {config[CONF_PIN]}")
-    pin_number = config[CONF_PIN]['number']
+    # pin_number = config[CONF_PIN]['number']
     # print(f"Pin number is {pin_number}")
-    cg.add(var.set_csmpin(pin_number))
-    cg.add(var.set_pin(pin))
+    # cg.add(var.set_csmpin(pin_number))
+    adc_sensor = await cg.get_variable(config[CONF_SENSOR])
+    cg.add(var.set_adc_source(adc_sensor)
+    # cg.add(var.set_pin(pin))
     cg.add_library("RobTillaart/ACS712", "0.3.10")
     if "current" in config:
         sens = await sensor.new_sensor(config["current"])
