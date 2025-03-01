@@ -1,0 +1,50 @@
+
+external_components:
+#  - source:
+#      type: local
+#      path: ~/git-controlled/acs712_external/components
+#    refresh: 10s
+
+  - source: github://chadmatsalla/esphome_components
+    refresh: 30s
+    components:
+      - acs712
+
+esphome:
+  name: acs
+  friendly_name: "ACS712"
+  libraries:
+    - https://github.com/RobTillaart/ACS712.git
+
+esp32:
+  board: seeed_xiao_esp32c3
+
+logger:
+  level: DEBUG
+
+i2c:
+  sda: GPIO8
+  scl: GPIO9
+  scan: True
+
+ads1115:
+  - address: 0x48
+    id: ads1115_1
+
+sensor:
+- id: csmacs
+  name: "Dieselwurks Sensor"
+  platform: acs712
+  # csmpin: 0
+  pin: GPIO0
+  current:
+    name: "Current"
+    id: current
+    unit_of_measurement: A
+    accuracy_decimals: 2
+  power:
+    name: "Watts"
+    id: watts
+    unit_of_measurement: W
+    accuracy_decimals: 2
+  update_interval: 5s
