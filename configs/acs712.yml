@@ -1,8 +1,11 @@
 external_components:
-- source: github://chadmatsalla/esphome_components
-  refresh: 10s
-  components:
-    - acs712
+# - source: github://chadmatsalla/esphome_components
+#  refresh: 10s
+#  components:
+#    - acs712
+- source:
+    type: local
+    path: ~/git-controlled/esphome_components/components
 
 esphome:
   name: acs
@@ -19,6 +22,7 @@ sensor:
 - id: csmacs
   name: "Dieselwurks Sensor"
   platform: acs712
+  sensor: acs712_1
   # csmpin: 0
   # pin: GPIO0
   current:

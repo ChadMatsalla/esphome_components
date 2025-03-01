@@ -7,7 +7,7 @@
 #include "esphome/core/hal.h"
 
 namespace esphome {
-namespace acs712_external {
+namespace acs712 {
 
 class ACS712Sensor : public sensor::Sensor, public PollingComponent {
    public:
@@ -15,6 +15,7 @@ class ACS712Sensor : public sensor::Sensor, public PollingComponent {
 
     void setup() override;
     void update() override;
+    void loop() override;
 
     // ✅ Declare setter functions correctly
     void set_current_sensor(sensor::Sensor *sensor) { this->current_sensor = sensor; }
@@ -41,10 +42,14 @@ class ACS712Sensor : public sensor::Sensor, public PollingComponent {
     GPIOPin *pin_ = nullptr;
     int csmpin_ = 99;
     bool is_sampling_ = false;
+    // https://www.allegromicro.com/-/media/files/datasheets/acs712-datasheet.ashx
     uint32_t sample_duration_ = 100;
+    uint32_t sample_wait_before_ = 280;
+    float sample_sum_ = 0.0f;
+    uint32_t num_samples_ = 0;
 
 
 };
 
-}  // namespace acs712_external
+}  // namespace acs712
 }  // namespace esphome

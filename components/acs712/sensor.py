@@ -1,20 +1,21 @@
 # from esphome import pins
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import sensor
+from esphome.components import sensor, voltage_sampler
 from esphome.const import (
   UNIT_AMPERE,
   UNIT_WATT,
   ICON_FLASH,
   ICON_CURRENT_AC,
-#   CONF_PIN,
-  CONF_ID
+  CONF_PIN,
+  CONF_ID,
+  CONF_SENSOR,
 )
 
 DEPENDENCIES = []
 AUTO_LOAD = ["voltage_sampler"]
 
-acs712_ns = cg.esphome_ns.namespace("acs712_external")
+acs712_ns = cg.esphome_ns.namespace("acs712")
 ACS712Sensor = acs712_ns.class_("ACS712Sensor",
     sensor.Sensor,
     cg.PollingComponent)
@@ -49,7 +50,7 @@ async def to_code(config):
     # print(f"Pin number is {pin_number}")
     # cg.add(var.set_csmpin(pin_number))
     adc_sensor = await cg.get_variable(config[CONF_SENSOR])
-    cg.add(var.set_adc_source(adc_sensor)
+    cg.add(var.set_adc_source(adc_sensor))
     # cg.add(var.set_pin(pin))
     cg.add_library("RobTillaart/ACS712", "0.3.10")
     if "current" in config:
