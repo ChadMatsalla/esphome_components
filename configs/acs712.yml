@@ -1,14 +1,8 @@
-
 external_components:
-#  - source:
-#      type: local
-#      path: ~/git-controlled/acs712_external/components
-#    refresh: 10s
-
-  - source: github://chadmatsalla/esphome_components
-    refresh: 30s
-    components:
-      - acs712
+- source: github://chadmatsalla/esphome_components
+  refresh: 30s
+  components:
+    - acs712
 
 esphome:
   name: acs
@@ -18,6 +12,12 @@ esphome:
 
 esp32:
   board: seeed_xiao_esp32c3
+
+wifi:
+  ssid: !secret ssid
+  password: !secret password
+
+api:
 
 logger:
   level: DEBUG
@@ -30,6 +30,12 @@ i2c:
 ads1115:
   - address: 0x48
     id: ads1115_1
+
+web_server:
+  version: 3
+
+ota:
+  platform: esphome
 
 sensor:
 - id: csmacs
