@@ -21,8 +21,11 @@ class ACS712Sensor : public sensor::Sensor, public PollingComponent {
     void set_current_sensor(sensor::Sensor *sensor) { this->current_sensor = sensor; }
     void set_power_sensor(sensor::Sensor *sensor) { this->power_sensor = sensor; }
     void set_adc_source(voltage_sampler::VoltageSampler *source) { source_ = source; }
-
+    void set_midpoint(float midpoint) { midpoint_ = midpoint; } 
     void set_pin(GPIOPin *pin) { pin_ = pin; }
+    void set_max_amps(uint8_t maxamps) { maxamps_ = maxamps; }
+    void set_max_volts(float maxvolts) { maxvolts_ = maxvolts; }
+    void do_something_with_reference(
     void set_csmpin(int pin) {
         // if (esphome::validate_pin()) {
             csmpin_ = pin;
@@ -47,6 +50,11 @@ class ACS712Sensor : public sensor::Sensor, public PollingComponent {
     uint32_t sample_wait_before_ = 280;
     float sample_sum_ = 0.0f;
     uint32_t num_samples_ = 0;
+    float midpoint_ = 0.0f;
+    float maxvolts_ = 0.0f;
+    uint8_t maxamps_ = 0;
+    float voltage_multiplier_ = 1.0f;
+    float voltage_offset_ = 0.0f;
 
 
 };

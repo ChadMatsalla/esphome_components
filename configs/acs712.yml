@@ -10,10 +10,10 @@ external_components:
 esphome:
   name: acs
   friendly_name: "ACS712"
-  libraries:
-    - https://github.com/RobTillaart/ACS712.git
+  # libraries:
+  #   - https://github.com/RobTillaart/ACS712.git
 
-api:
+
 
 logger:
   level: DEBUG
@@ -22,17 +22,20 @@ sensor:
 - id: csmacs
   name: "Dieselwurks Sensor"
   platform: acs712
-  sensor: acs712_1
+  sensor: ads1115_a0
+  update_interval: 5s
+  midpoint: 1.65
+  max_volts: 3.08
+  max_amps: 5
   # csmpin: 0
   # pin: GPIO0
-  current:
-    name: "Current"
-    id: current
-    unit_of_measurement: A
-    accuracy_decimals: 2
-  power:
-    name: "Watts"
-    id: watts
-    unit_of_measurement: W
-    accuracy_decimals: 2
-  update_interval: 5s
+#  current:
+#    name: "Current"
+#    id: current
+#    unit_of_measurement: A
+#    accuracy_decimals: 2
+#  power:
+#    name: "Watts"
+#    id: watts
+#    unit_of_measurement: W
+#    accuracy_decimals: 2

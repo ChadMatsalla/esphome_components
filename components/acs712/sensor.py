@@ -29,7 +29,9 @@ CONFIG_SCHEMA = (
     ).extend({
         # cv.Required(CONF_PIN): cv.All(pins.internal_gpio_input_pin_schema),
         cv.Required(CONF_SENSOR): cv.use_id(voltage_sampler.VoltageSampler),
-        # cv.Optional("csmpin"): cv.positive_int,
+        cv.Required("midpoint"): cv.float_range(0.0, 3.3),
+        cv.Required("max_amps"): cv.int_range(5, 30),
+        cv.Required("max_volts"): cv.float_range(1, 3.3),
         cv.Optional("current"): sensor.sensor_schema(),
         cv.Optional("power"): sensor.sensor_schema(
             unit_of_measurement=UNIT_WATT,
@@ -49,8 +51,12 @@ async def to_code(config):
     # pin_number = config[CONF_PIN]['number']
     # print(f"Pin number is {pin_number}")
     # cg.add(var.set_csmpin(pin_number))
+
     adc_sensor = await cg.get_variable(config[CONF_SENSOR])
     cg.add(var.set_adc_source(adc_sensor))
+    cg.add(var.set_midpoint(config.get("midpoint", 1.65)))
+    cg.add(var.set_max_amps(config.get("max_amps", 5)))
+    cg.add(var.set_max_volts(config.get("max_volts", 3.3)))
     # cg.add(var.set_pin(pin))
     cg.add_library("RobTillaart/ACS712", "0.3.10")
     if "current" in config:

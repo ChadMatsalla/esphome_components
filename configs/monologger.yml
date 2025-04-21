@@ -1,0 +1,24 @@
+esphome:
+  name: monologger-test
+
+esp32:
+  board: seeed_xiao_esp32c3
+
+external_components:
+- source:
+    type: local
+    path: ~/git-controlled/esphome_components/components
+
+
+monologger:
+  level: DEBUG
+
+logger:
+  level: None
+
+text_sensor:
+  - platform: template
+    name: Stuffy
+    update_interval: 1s
+    lambda: |-
+      return { "Chad was here" };
